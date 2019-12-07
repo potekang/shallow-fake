@@ -1,4 +1,5 @@
 # shallow-fake
+![Sample output](https://github.com/potekang/shallow-fake/blob/master/output_sample.jpg)
 ## A fake character generator based on wgan-gp 
 ### Dataset
 Dataset can be generated in ./make_dataset/make_dataset.py. The code and chinese text file is derived from https://github.com/marcin7Cd/variant-of-CPPN-GAN/blob/master/chinese.py. 
