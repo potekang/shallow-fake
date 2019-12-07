@@ -1,9 +1,14 @@
 
 import functools
-
+import os
 import imlib as im
 import pylib as py
+
+
 import tensorflow as tf
+tf.compat.v1.disable_v2_behavior()
+tf.compat.v1.enable_eager_execution()
+
 import tensorflow.keras as keras
 import tf2lib as tl
 import tf2gan as gan
@@ -11,10 +16,16 @@ import numpy as np
 import tqdm
 import cv2
 import from_png2npy
-import fid_keras as fid
+#import fid_keras as fid
+import fidv2 as fid
 #import fid
+#import tensorflow.compat.v1 as tfv1
+#tfv1.enable_eager_execution()
+#solve ValueError: tf.enable_eager_execution must be called at program startup.
 
+import data
 import module
+#tf.enable_execution()
 
 #CUDA_VISIBLE_DEVICES=0 python3 train.py --dataset=japanese --epoch=800 --n_d=5
 
@@ -170,9 +181,11 @@ def eval_fid():
     gen_dir= "./evaluation/generated"
     train_data = from_png2npy.getFileArr(train_dir,"train_data")
     generated = from_png2npy.getFileArr(gen_dir,"generated")   
-    TRAIN_DIR = "./evaluation/train_data.npy"
-    GEN_DIR = "./evaluation/generated.npy"
-    fid_val = fid.cal_fid(TRAIN_DIR, GEN_DIR)
+    #TRAIN_DIR = "./evaluation/train_data.npy"
+    #GEN_DIR = "./evaluation/generated.npy"
+    fid_path = ['./evaluation/training_for_fid', './evaluation/generated_for_fid']
+    fid_val = fid.calculate_fid_given_paths(fid_path,'./')
+    print(fid_val)
     return fid_val
 
 # ==============================================================================
@@ -271,6 +284,9 @@ with train_summary_writer.as_default():
                 im.imwrite( img, py.join(samples_dir, 'fake%03d.jpg' %i))
             #generate npy & compare & savefid
             temp_fid = eval_fid()
+            fid_ep = str(ep) + " " + str(temp_fid) + "\n"
+            with open("fid_stats.txt", "a") as stats_file:
+                stats_file.write(fid_ep)
             if(temp_fid < opt_fid):
                 opt_fid = temp_fid
                 opt_checkpoint.save(ep)

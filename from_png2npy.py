@@ -35,6 +35,10 @@ def getFileArr(dir,category):
         img = cv2.imread(file_path, 0)
         img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
         result = np.array(img)
+        #----save img------
+        file_path = dir+'_for_fid/'+file
+        im = Image.fromarray(img)
+        im.save(file_path)
         #print(np.shape(result))
         result = result.reshape((3, 64, 64))
         result = result / 255.0
@@ -56,8 +60,8 @@ def getFileArr(dir,category):
         each_list.append(result)
         each_list.append(label_one_zero)
         ret_arr.append(each_list)
-    # os.makedirs("F:/Python project/GANMNIST/dataset")
-    np.save('./evaluation/'+category+'.npy', ret_arr)
+
+    #np.save('./evaluation/'+category+'.npy', ret_arr)
     return ret_arr
 
 def getnpy(url):
