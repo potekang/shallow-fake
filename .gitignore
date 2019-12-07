@@ -3,3 +3,6 @@
 *.TTF
 *.ttc
 *.otf
+*.gz
+*.pyc
+__pycache__/
