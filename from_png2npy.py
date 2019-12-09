@@ -40,29 +40,29 @@ def getFileArr(dir,category):
         im = Image.fromarray(img)
         im.save(file_path)
         #print(np.shape(result))
-        result = result.reshape((3, 64, 64))
-        result = result / 255.0
-        map_file_result[file] = result
-        result_arr.append(result)
-        count = count + 1
-    for file in file_list:
-        map_file_label[file] = map_new[map[file]]
-        # map[file]=map_new[map[file]]
+        #result = result.reshape((3, 64, 64))
+        #result = result / 255.0
+        #map_file_result[file] = result
+        #result_arr.append(result)
+        #count = count + 1
+    #for file in file_list:
+    #    map_file_label[file] = map_new[map[file]]
+    #    # map[file]=map_new[map[file]]
 
-    ret_arr = []
-    for file in file_list:
-        each_list = []
-        label_one_zero = np.zeros(count_label)
-        result = map_file_result[file]
-        label = map_file_label[file]
-        label_one_zero[label] = 1.0
-        # print(label_one_zero)
-        each_list.append(result)
-        each_list.append(label_one_zero)
-        ret_arr.append(each_list)
+    #ret_arr = []
+    #for file in file_list:
+    #    each_list = []
+    #    label_one_zero = np.zeros(count_label)
+    #    result = map_file_result[file]
+    #    label = map_file_label[file]
+    #    label_one_zero[label] = 1.0
+    #    # print(label_one_zero)
+    #    each_list.append(result)
+    #    each_list.append(label_one_zero)
+    #    ret_arr.append(each_list)
 
     #np.save('./evaluation/'+category+'.npy', ret_arr)
-    return ret_arr
+    #return ret_arr
 
 def getnpy(url):
     data=np.load(url)

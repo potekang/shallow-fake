@@ -25,12 +25,12 @@ import tensorflow.compat.v1 as tfv1
 #tfv1.disable_eager_execution()
 #tf.compat.v1.disable_v2_behavior()
 #tfv1.enable_execution()
-from tensorflow.compat.v1 import ConfigProto
-from tensorflow.compat.v1 import InteractiveSession
-config = ConfigProto()
-config.gpu_options.allow_growth = True
-session = InteractiveSession(config=config)
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+#from tensorflow.compat.v1 import ConfigProto
+#from tensorflow.compat.v1 import InteractiveSession
+#config = ConfigProto()
+#config.gpu_options.allow_growth = True
+#session = InteractiveSession(config=config)
+#os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 from imageio import imread
 from scipy import linalg
@@ -293,8 +293,8 @@ def _handle_path(path, sess, low_profile=False):
     if path.endswith('.npy'):
         f = np.load(path)
         f.astype(np.float32)
-        #m, s = f['mu'][:], f['sigma'][:]
-        m, s = calculate_activation_statistics(f, sess)
+        m, s = f['mu'][:], f['sigma'][:]
+        #m, s = calculate_activation_statistics(f, sess)
         print("m:", m)
         print("s:", s)
         del x #clean up memory

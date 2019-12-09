@@ -16,14 +16,18 @@ import numpy as np
 import tqdm
 import cv2
 import from_png2npy
-#import fid_keras as fid
 import fidv2 as fid
 #import fid
 #import tensorflow.compat.v1 as tfv1
 #tfv1.enable_eager_execution()
 #solve ValueError: tf.enable_eager_execution must be called at program startup.
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.compat.v1 import InteractiveSession
+config = ConfigProto()
+config.gpu_options.allow_growth = True
+session = InteractiveSession(config=config)
 
-import data
+#import data
 import module
 #tf.enable_execution()
 
@@ -45,6 +49,11 @@ py.arg('--gradient_penalty_weight', type=float, default=10.0)
 
 args = py.args()
 
+#for dcgan
+#adversarial_loss_mode = 'gan'
+#gradient_penalty_mode = 'none'
+
+#for wgan-gp
 adversarial_loss_mode = 'wgan'
 gradient_penalty_mode = 'wgan-gp'
 
@@ -231,6 +240,8 @@ try:  # restore opt_checkpoint including the epoch counter
 	
 except Exception as e:
     print("restore opt checkopint failed")
+    f= open(opt_fid_dir,"w+")
+    f.close()
     print(e)
 
 
@@ -273,15 +284,15 @@ with train_summary_writer.as_default():
         checkpoint.save(ep)
         #calculate fid after 500 epoch
         #be nice to me graphic card
-        if ep > 700:
+        if ep > 400:
             #generate fake pics
             samples_dir = "./evaluation/generated"
             py.mkdir(samples_dir)
             for i in range(0,1000):
-                z = tf.random.normal(shape=(1, 1, 1, args.z_dim))
-                x_fake = G(z, training=False)
-                img = im.immerge_(x_fake).squeeze()
-                im.imwrite( img, py.join(samples_dir, 'fake%03d.jpg' %i))
+                z_fid = tf.random.normal(shape=(1, 1, 1, args.z_dim))
+                x_fake_fid = G(z_fid, training=False)
+                img_fid = im.immerge_(x_fake_fid).squeeze()
+                im.imwrite( img_fid, py.join(samples_dir, 'fake%03d.jpg' %i))
             #generate npy & compare & savefid
             temp_fid = eval_fid()
             fid_ep = str(ep) + " " + str(temp_fid) + "\n"
